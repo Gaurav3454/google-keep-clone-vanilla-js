@@ -55,7 +55,28 @@ class App {
             this.selectNote(e);
             this.openModal(e);
             this.deleteNote(e);
+        });
+
+        this.$form.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const title = this.$noteTitle.value;
+            const text = this.$noteText.value;
+            const hasNote = title || text;
+            if (hasNote) {
+                this.addNote({ title, text })
+            }
+        });
+
+        this.$formCloseButton.addEventListener("click", (e) => {
+            e.stopPropagation();
+            this.closeForm();
+        });
+        this.$modalCloseButton.addEventListener("click", (e) => {
+
+            this.closeModal(e);
         })
+
 
     }
     handleFormClick(event) {
@@ -96,6 +117,44 @@ class App {
         }
         this.$noteTitle.value = '';
         this.$noteText.value = '';
+    }
+    closeTooltip(event) {
+        if (!event.target.matches('.fa-pencil')) return;
+        this.$colorTooltip.style.display = "none";
+    }
+    // save notes to local storage
+    addNote({ title, text }) {
+
+        const newNote = {
+            title,
+            text,
+            color: "white",
+            id: this.notes.length > 0 ? this.notes[this.notes.length - 1].id + 1 : 1
+        }
+        this.notes = [...this.notes, newNote];
+        this.render();
+        this.closeForm();
+    }
+    editNote() {
+        const title = this.$modalTitle.value;
+        const text = this.$modalText.value;
+        this.notes = this.notes.map((note) => {
+            note.id === Number(this.id) ? { ...note, title, text } : note
+        });
+        this.render();
+    }
+    editNoteColor(color) {
+        this.notes = this.notes.map((note) => {
+            note.id === Number(this.id) ? { ...note, color } : note
+        })
+    }
+    deleteNote(event) {
+        event.stopPropagation();
+        if (!event.target.matches('.fa-trash')) return;
+        const id = event.target.dataset.id;
+        this.notes = this.notes.filter(notes => note.id !== Number(id));
+        this.render();
+
     }
 }
 
