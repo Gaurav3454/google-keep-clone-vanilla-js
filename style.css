@@ -1,0 +1,69 @@
+* {
+    margin: 0;
+    font-family: Arial;
+    box-sizing: border-box; /* Corrected 'border' to 'box-sizing' */
+}
+
+i{
+    font-size: 30px;
+ 
+   
+}
+.navbar {
+    height: 70px;
+    background-color: white;
+    color: black;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    border-bottom: 1px solid black;
+}
+
+.nav-logo {
+    display: flex;
+    height: 50px;
+    width: 110px;
+}
+
+.logo {
+    background-image: url("/keep_2020q4_48dp.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    height: 100%;
+    width: 100%;
+}
+.search-bar{
+    height: 50px;
+    width: 500px;
+    border-radius: 4px;
+    border: none;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); 
+      padding: 8px; 
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+}
+.search-bar i{
+    font-size: 30px;
+    margin: 20px;
+   
+}
+.search-bar input {
+  
+    margin: auto; 
+  border: none;
+    outline: none; 
+    font-size: 1.5rem;
+    font-weight: 100;
+}
+.right-nav {
+    display: flex;
+    align-items: center;
+    color: rgb(187, 187, 188);
+    
+}
+.right-nav img{
+    border-radius: 50%;
+    cursor: pointer;
+}
