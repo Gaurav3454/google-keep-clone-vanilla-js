@@ -156,6 +156,14 @@ class App {
         this.render();
 
     }
+    selectNote(event) {
+        const $selectedNote = event.target.closest(".note");
+        if (!$selectedNote) return;
+        const [$noteTitle, $noteText] = $selectedNote.children;
+        this.title = $noteTitle.innerText;
+        this.text = $noteText.innerText;
+        this.id = $selectedNote.dataset.id;
+    }
 }
 
 new App();
