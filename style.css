@@ -12,7 +12,7 @@ i{
 .navbar {
     height: 70px;
     background-color: white;
-    color: black;
+    color: rgb(167, 167, 174);
     display: flex;
     align-items: center;
     justify-content: space-evenly;
@@ -21,8 +21,9 @@ i{
 
 .nav-logo {
     display: flex;
+    align-items: center;
     height: 50px;
-    width: 110px;
+    width: 150px;
 }
 
 .logo {
@@ -32,6 +33,9 @@ i{
     background-position: center;
     height: 100%;
     width: 100%;
+}
+.logo-title{
+    font-size: 34px;
 }
 .search-bar{
     height: 50px;
@@ -60,10 +64,11 @@ i{
 .right-nav {
     display: flex;
     align-items: center;
-    color: rgb(187, 187, 188);
+    color: rgb(167, 167, 174);
     
 }
 .right-nav img{
     border-radius: 50%;
     cursor: pointer;
+    height: 50px;
 }
