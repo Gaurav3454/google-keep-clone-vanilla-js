@@ -49,6 +49,40 @@
     </header>
     <!-- Home -->
 
+    <!-- Modal for editing -->
+    <div class="modal">
+      <input type="text" class="modal-title" placeholder="Title" />
+      <input type="text" class="modal-text" placeholder="Take a note..." />
+      <span class="modal-close-button">Close</span>
+    </div>
+    <!-- main -->
+
+    <main>
+      <div id="form-container">
+        <form id="form" autocomplete="off">
+          <input type="text" placeholder="Title" id="note-title" />
+          <input type="text" placeholder="Take a note..." id="note-text" />
+          <div id="form-buttons">
+            <button type="submit" id="submit-button">Submit</button>
+            <button type="submit" id="form-close-button">Close</button>
+          </div>
+        </form>
+      </div>
+      <div id="notes"></div>
+      <div id="placeholder">
+        <img id="placeholder-logo" src="" />
+        <p id="placeholder-text">Notes you add appear here</p>
+      </div>
+      <!--  -->
+      <div id="color-tooltip">
+        <div class="color-option" data-color="#fff" id="white"></div>
+        <div class="color-option" data-color="purple" id="purple"></div>
+        <div class="color-option" data-color="red" id="red"></div>
+        <div class="color-option" data-color="green" id="green"></div>
+      </div>
+
+      <!--  -->
+    </main>
     <!--  -->
     <script src="/script.js"></script>
   </body>
