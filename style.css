@@ -85,11 +85,25 @@ i {
     align-items: center;
     cursor: pointer;
 }
-
+.search-bar button{
+  border: none;
+  border-radius: 20px; /* Makes the button circular */
+height: 40px;
+  background-color: transparent; /* Transparent background */
+  cursor: pointer;
+  transition: background-color 0.5s ease;
+}
 .search-bar i {
-    font-size: 30px;
+    font-size: 25px;
     margin: 0 20px;
+    transition: all 0.50s ease;
+    /* border: 2px solid transparent; */
     /* Adjusted margin for better alignment */
+}
+.search-bar button:hover {
+
+ background-color: #d5d9dd;
+  /* Adjusted margin for better alignment */
 }
 
 .search-bar input {
@@ -314,8 +328,8 @@ input:focus {
   .note-title {
     padding-top: 12px;
     letter-spacing: 0.00625em;
-    font-size: 1rem;
-    font-weight: 500;
+    font-size: 1.5rem;
+    font-weight: 600;
     line-height: 1.5rem;
     min-height: 38px;
     padding: 16px 16px 0 16px;
