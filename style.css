@@ -28,19 +28,27 @@ i {
     color: rgb(167, 167, 174);
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    /* justify-content: space-between; */
     /* Changed from 'space-evenly' to 'space-between' for better spacing */
     border-bottom: 1px solid black;
 }
 
-.menu-bar {
+.menu-bar i {
     margin-left: 20px;
-    /* Added margin for better spacing */
+    padding: 12px;
+    /* overflow: hidden; */
+    
+    cursor: pointer;
+    height: 24px;
+    width: 24px;
+   
+  
 }
 
 .nav-logo {
     display: flex;
     align-items: center;
+    /* margin-left: 10px; */
     /* height: 50px;
     width: 150px; */
 }
@@ -50,22 +58,28 @@ i {
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
-    height: 63px;
+    padding-right: 4px;
+    padding-left: 39px;
+    height: 50px;
     width: 100%;
 }
 
 .logo-title {
     font-size: 34px;
     margin-left: 10px;
+    color: #5f6368;
+    cursor: pointer;
     /* Added margin for better spacing */
 }
 
 .search-bar {
+  background-color: rgb(238, 238, 238);
+  margin-left: 200px;
     height: 50px;
-    width: 700px;
-    border-radius: 4px;
+    width: auto;
+    border-radius: 8px;
     border: none;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); */
     padding: 8px;
     display: flex;
     align-items: center;
@@ -79,6 +93,9 @@ i {
 }
 
 .search-bar input {
+  
+  background-color: rgb(235, 235, 235);
+  width: 600px;
     flex: 1;
     /* Added flex: 1 for input to take remaining space */
     margin: auto;
@@ -139,7 +156,9 @@ main {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     margin: 32px auto 16px auto;
     max-width: 496px;
+    /* height: 60px; */
     transition-duration: 0.218s;
+    font-size: 3rem;
     transition-property: background, border, opacity, box-shadow, transform;
     transition-timing-function: ease-in;
 }
@@ -167,7 +186,7 @@ main {
     min-height: 43px;
     margin: 0 5px;
     padding: 10px;
-    font-size: 1rem;
+    font-size: 1.23rem;
     font-weight: 500;
     line-height: 1.5rem;
     letter-spacing: 0.00625rem;
@@ -182,7 +201,7 @@ main {
     min-height: 43px;
     margin: 0 5px;
     padding: 10px;
-    font-size: 1rem;
+    font-size: 1.23rem;
     font-weight: 500;
     line-height: 1.5rem;
     /* letter-spacing: 0.00625rem; */
@@ -323,6 +342,7 @@ input:focus {
   }
   
   .toolbar {
+    
     opacity: 0;
     flex-direction: row-reverse;
     align-items: center;
@@ -335,20 +355,22 @@ input:focus {
     transition: opacity 0.218s ease-in-out, background-color 0.218s ease-in-out,
       box-shadow 0.218s ease-in-out;
   }
-  
+ 
   .toolbar:hover {
     opacity: 1;
   }
   
   .toolbar-color,
-  .toolbar-delete {
+  .toolbar-delete,
+  .remove-star,.star-it {
     height: 20px;
-    margin: 0 8px;
+    margin: 0 10px;
     width: 20px;
     margin: 0 3px;
     cursor: pointer;
     color: #202124;
     opacity: 0.71;
+    font-size: 22px;
   }
   
   .toolbar-color-modal {
@@ -356,21 +378,23 @@ input:focus {
   }
   
   #color-tooltip {
-    border-bottom: 2px solid #fff;
     position: absolute;
-    top: -40;
+    top: 0; /* Change from 'top: -40' to 'top: 0' */
+    left: 0;
+   
+    z-index: 20;
     background: #fff;
     border: 1px solid black;
-    left: 0;
-    z-index: 20;
     border-radius: 5px;
-    display: none;
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
-    padding: 5px 7px 3px;
+    display: none;
     width: 136px;
     height: 40px;
     justify-content: space-between;
-  }
+    padding: 5px 7px 3px;
+
+}
+
   
   .color-option {
     width: 25px;

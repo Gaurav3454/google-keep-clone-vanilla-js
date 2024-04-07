@@ -17,17 +17,28 @@ class App {
         this.$modalText = document.querySelector(".modal-text");
         this.$modalCloseButton = document.querySelector(".modal-close-button");
         this.$colorTooltip = document.querySelector("#color-tooltip");
+        this.$searchText = document.getElementById('search-text').value;
+        this.$addStar = document.querySelector('.star-it');
+        this.$removeStar = document.querySelector('.remove-star');
+
 
         this.render();
         this.addEventListeners();
     }
 
     addEventListeners() {
+
         document.body.addEventListener("click", event => {
             this.handleFormClick(event);
             this.selectNote(event);
             this.openModal(event);
             this.deleteNote(event);
+            if (event.target.matches('.star-it')) {
+                this.addStar();
+            }
+            if (event.target.matches('.remove-star')) {
+                this.removeStar();
+            }
         });
 
         document.body.addEventListener("mouseover", event => {
@@ -72,7 +83,36 @@ class App {
         this.$modalCloseButton.addEventListener("click", event => {
             this.closeModal(event);
         });
+        document.getElementById('search-text').addEventListener('input', event => {
+            this.$searchText = event.target.value;
+            this.render();
+        });
+
     }
+
+    addStar() {
+        // console.log("addStar called");
+        // console.log("Current this.id:", this.id);
+        // console.log("nate this.id:", notes.id);
+        const id = event.target.dataset.id;
+        const selectedNote = this.notes.find((note) => note.id === Number(id));
+        console.log(selectedNote);
+        if (selectedNote) {
+            selectedNote.isStared = true;
+            this.render();
+        }
+    }
+
+    removeStar() {
+        const id = event.target.dataset.id;
+        const selectedNote = this.notes.find((note) => note.id === Number(id));
+        console.log(selectedNote);
+        if (selectedNote) {
+            selectedNote.isStared = false;
+            this.render();
+        }
+    }
+
 
     handleFormClick(event) {
         const isFormClicked = this.$form.contains(event.target);
@@ -106,6 +146,8 @@ class App {
 
     openModal(event) {
         if (event.target.matches('.toolbar-delete')) return;
+        if (event.target.matches('.remove-star')) return;
+        if (event.target.matches('.star-it')) return;
 
         if (event.target.closest(".note")) {
             this.$modal.classList.toggle("open-modal");
@@ -139,6 +181,7 @@ class App {
             title,
             text,
             color: "white",
+            isStared: false,
             id: this.notes.length > 0 ? this.notes[this.notes.length - 1].id + 1 : 1
         };
         this.notes = [...this.notes, newNote];
@@ -192,26 +235,56 @@ class App {
         const hasNotes = this.notes.length > 0;
         this.$placeholder.style.display = hasNotes ? "none" : "flex";
 
-        this.$notes.innerHTML = this.notes
-            .map(
-                note => `
-          <div style="background: ${note.color};" class="note" data-id="${note.id
-                    }">
+        const filteredNotes = this.notes.filter(note =>
+            (note.title && note.title.toLowerCase().includes(this.$searchText.toLowerCase())) ||
+            (note.text && note.text.toLowerCase().includes(this.$searchText.toLowerCase()))
+        );
+        console.log(filteredNotes);
+
+        if (filteredNotes.length > 0) {
+            this.$notes.innerHTML = filteredNotes
+                .map(
+                    note => `
+          <div style="background: ${note.color};" class="note" data-id="${note.id}">
             <div class="${note.title && "note-title"}">${note.title}</div>
             <div class="note-text">${note.text}</div>
             <div class="toolbar-container">
-              <div class="toolbar">
-                <img class="toolbar-color" data-id=${note.id
-                    } src="https://icon.now.sh/palette">
-                <img data-id=${note.id
-                    } class="toolbar-delete" src="https://icon.now.sh/delete">
+            <div class="toolbar">
+            <i class="fa-solid fa-trash toolbar-delete "  data-id=${note.id}></i>
+            <i class="fa-solid fa-droplet toolbar-color" data-id=${note.id}></i>
+              ${note.isStared ? `<i class="fa-solid fa-star remove-star" data-id=${note.id} style="color: #FFD43B;"></i>` : `<i class="fa-regular fa-star star-it" data-id=${note.id}></i>`}
+             
+             
+           
+             
               </div>
             </div>
           </div>
        `
-            )
-            .join("");
+                )
+                .join("");
+        } else {
+            this.$notes.innerHTML = this.notes
+                .map(
+                    note => `
+          <div style="background: ${note.color};" class="note" data-id="${note.id}">
+            <div class="${note.title && "note-title"}">${note.title}</div>
+            <div class="note-text">${note.text}</div>
+            <div class="toolbar-container">
+              <div class="toolbar">
+              <i class="fa-solid fa-trash toolbar-delete "  data-id=${note.id}></i>
+              <i class="fa-solid fa-droplet toolbar-color" data-id=${note.id}></i>
+              ${note.isStared ? `<i class="fa-solid fa-star remove-star" data-id=${note.id} style="color: #FFD43B;"></i>` : `<i class="fa-regular fa-star star-it" data-id=${note.id}></i>`}
+
+              </div>
+            </div>
+          </div>
+       `
+                )
+                .join("");
+        }
     }
+
 }
 
 new App();
