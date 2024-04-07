@@ -107,3 +107,7 @@ Open a pull request
 
 ## License
 This project is licensed under the MIT License.
+```sql
+
+The "Contributing" and "License" sections are now located at the end of the Markdown file, just before the closing backticks. Feel free to adjust the content as needed!
+```
