@@ -36,28 +36,3 @@ git clone https://github.com/yourusername/google-keep-clone.git
 cd google-keep-clone
 
 # Open index.html in a web browser
-Usage
-Once the project is set up, you can perform the following actions:
-
-Create a new note by clicking on the '+' button
-Edit a note by clicking on the note content
-Delete a note by clicking on the trash bin icon
-Archive a note by clicking on the archive icon
-Drag and rearrange notes to change their order
-Change note color using the color palette
-Search for notes using the search bar
-Screenshots
-Include screenshots or images of your project here to give viewers a visual overview.
-
-Contributing
-If you wish to contribute to this project, please follow these steps:
-
-Fork the project
-Create your feature branch (git checkout -b feature/your-feature)
-Commit your changes (git commit -am 'Add some feature')
-Push to the branch (git push origin feature/your-feature)
-Open a pull request
-License
-This project is licensed under the MIT License.
-
-I've added "Drag and rearrange notes" to the Features section and the Usage section to describe how users can drag and rearrange notes in your Google Keep clone. Feel free to adjust the content as needed!
