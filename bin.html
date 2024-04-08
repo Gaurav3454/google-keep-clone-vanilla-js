@@ -31,9 +31,7 @@
         <!-- Search bar -->
         <div class="search-bar">
           <form>
-            <button class="search-logo">
-              <i class="fa-solid fa-magnifying-glass"></i>
-            </button>
+            <button><i class="fa-solid fa-magnifying-glass"></i></button>
             <!-- <span class="tooltip-text">Search</span> -->
             <input id="search-text" type="text" placeholder="Search" />
           </form>
@@ -61,7 +59,7 @@
           >
         </li>
         <li>
-          <a href="archive.html"
+          <a href="./archive.html"
             ><span class="icon-span"
               ><i class="fa-solid fa-box-archive"></i></span
             >Archive</a
@@ -85,20 +83,10 @@
     <!-- main -->
 
     <main>
-      <div id="form-container">
-        <form id="form" autocomplete="off">
-          <input type="text" placeholder="Title" id="note-title" />
-          <input type="text" placeholder="Take a note..." id="note-text" />
-          <div id="form-buttons">
-            <button type="submit" id="submit-button">Submit</button>
-            <button type="submit" id="form-close-button">Close</button>
-          </div>
-        </form>
-      </div>
-      <div id="notes"></div>
+      <div id="notes" style="margin-top: 100px"></div>
       <div id="placeholder">
         <img id="placeholder-logo" src="" />
-        <p id="placeholder-text">Notes you add appear here</p>
+        <!-- <p id="placeholder-text">Notes you add appear here</p> -->
       </div>
       <!--  -->
       <div id="color-tooltip">

@@ -1,10 +1,13 @@
 class App {
     constructor() {
         this.notes = JSON.parse(localStorage.getItem('notes')) || [];
+        // this.archive = JSON.parse(localStorage.getItem('notes')) || [];
         this.title = "";
         this.text = "";
         this.id = "";
+        this.bin = JSON.parse(localStorage.getItem('bin')) || [];
 
+        this.$menu = document.getElementById('menu');
         this.$placeholder = document.querySelector("#placeholder");
         this.$form = document.querySelector("#form");
         this.$notes = document.querySelector("#notes");
@@ -20,6 +23,7 @@ class App {
         this.$searchText = document.getElementById('search-text').value;
         this.$addStar = document.querySelector('.star-it');
         this.$removeStar = document.querySelector('.remove-star');
+        this.draggedItem = null;
 
 
         this.render();
@@ -27,6 +31,7 @@ class App {
     }
 
     addEventListeners() {
+
 
         document.body.addEventListener("click", event => {
             this.handleFormClick(event);
@@ -39,6 +44,7 @@ class App {
             if (event.target.matches('.remove-star')) {
                 this.removeStar();
             }
+            if (event.target.matches('.draggable')) return;
         });
 
         document.body.addEventListener("mouseover", event => {
@@ -88,6 +94,34 @@ class App {
             this.render();
         });
 
+
+
+        document.addEventListener('dragstart', (event) => {
+            this.draggedItem = event.target;
+            console.log('Drag Start:', this.draggedItem);
+        });
+
+        document.addEventListener('dragover', (event) => {
+            event.preventDefault();
+            console.log('Drag Over:', event.target);
+        });
+
+        document.addEventListener('drop', (event) => {
+            event.preventDefault(); // Prevent default action
+            if (event.target.getAttribute('draggable') === 'true') {
+                console.log('Drop Target:', event.target);
+                if (this.draggedItem) {
+                    const dropTargetParent = event.target.parentNode;
+                    if (dropTargetParent.tagName.toLowerCase() === 'div') {
+                        dropTargetParent.insertBefore(this.draggedItem, event.target.nextSibling);
+                        console.log('Drop:', this.draggedItem, 'before', event.target);
+                    }
+                }
+            }
+        });
+
+
+
     }
 
     addStar() {
@@ -99,6 +133,7 @@ class App {
         console.log(selectedNote);
         if (selectedNote) {
             selectedNote.isStared = true;
+
             this.render();
         }
     }
@@ -115,7 +150,8 @@ class App {
 
 
     handleFormClick(event) {
-        const isFormClicked = this.$form.contains(event.target);
+        const form = this.$form;
+        const isFormClicked = form && form.contains(event.target);
 
         const title = this.$noteTitle.value;
         const text = this.$noteText.value;
@@ -129,6 +165,7 @@ class App {
             this.closeForm();
         }
     }
+
 
     openForm() {
         this.$form.classList.add("form-open");
@@ -148,6 +185,7 @@ class App {
         if (event.target.matches('.toolbar-delete')) return;
         if (event.target.matches('.remove-star')) return;
         if (event.target.matches('.star-it')) return;
+        if (event.target.matches('.draggable')) return;
 
         if (event.target.closest(".note")) {
             this.$modal.classList.toggle("open-modal");
@@ -218,16 +256,67 @@ class App {
         event.stopPropagation();
         if (!event.target.matches('.toolbar-delete')) return;
         const id = event.target.dataset.id;
-        this.notes = this.notes.filter(note => note.id !== Number(id));
-        this.render();
+        const deletedNote = this.notes.find(note => note.id === Number(id));
+        if (deletedNote) {
+            this.bin.push(deletedNote);
+            // console.log("heeeee", this.bin)
+            this.notes = this.notes.filter(note => note.id !== Number(id));
+            this.render();
+        }
     }
 
     render() {
-        this.saveNotes();
-        this.displayNotes();
-    }
 
+
+        this.saveNotes();
+        if (window.location.pathname.includes("archive.html")) {
+            this.displayStarredNotes();
+        }
+        else if (window.location.pathname.includes("bin.html")) {
+            this.displayBinNotes();
+        } else {
+            this.displayNotes();
+        }
+
+    }
+    displayBinNotes() {
+        // const starredNotes = this.notes.filter(note => note.isStared);
+        if (this.bin.length > 0) {
+            this.$notes.innerHTML = this.bin
+                .map(
+                    note => `
+                    <div style="background: ${note.color}; min-height: 50px;" class="note draggable" draggable="true" data-id="${note.id}">
+                    <div class="${note.title ? 'note-title' : ''}">${note.title}</div>
+                    <div class="note-text">${note.text}</div>
+                </div>
+               
+       `
+                )
+                .join("");
+        } else {
+            this.$notes.innerHTML = `<p id="placeholder-text">No deleted notes found.</p>`;
+        }
+    }
+    displayStarredNotes() {
+        const starredNotes = this.notes.filter(note => note.isStared);
+        if (starredNotes.length > 0) {
+            this.$notes.innerHTML = starredNotes
+                .map(
+                    note => `
+                    <div style="background: ${note.color}; min-height: 50px;" class="note draggable" draggable="true" data-id="${note.id}">
+                    <div class="${note.title ? 'note-title' : ''}">${note.title}</div>
+                    <div class="note-text">${note.text}</div>
+                </div>
+               
+       `
+                )
+                .join("");
+        } else {
+            this.$notes.innerHTML = `<p id="placeholder-text">No starred notes found.</p>`;
+        }
+    }
     saveNotes() {
+        localStorage.setItem('bin', JSON.stringify(this.bin));
         localStorage.setItem('notes', JSON.stringify(this.notes))
     }
 
@@ -245,7 +334,7 @@ class App {
             this.$notes.innerHTML = filteredNotes
                 .map(
                     note => `
-          <div style="background: ${note.color};" class="note" data-id="${note.id}">
+          <div style="background: ${note.color};" class="note draggable" draggable=true data-id="${note.id}">
             <div class="${note.title && "note-title"}">${note.title}</div>
             <div class="note-text">${note.text}</div>
             <div class="toolbar-container">
@@ -267,7 +356,7 @@ class App {
             this.$notes.innerHTML = this.notes
                 .map(
                     note => `
-          <div style="background: ${note.color};" class="note" data-id="${note.id}">
+          <div style="background: ${note.color};" class="note draggable" draggable=true data-id="${note.id}">
             <div class="${note.title && "note-title"}">${note.title}</div>
             <div class="note-text">${note.text}</div>
             <div class="toolbar-container">
@@ -285,6 +374,17 @@ class App {
         }
     }
 
+
 }
 
 new App();
+
+document.addEventListener("DOMContentLoaded", function () {
+    const sidebar = document.querySelector('.sidebar');
+    const menuBarIcon = document.querySelector('#menu-item ');
+
+    menuBarIcon.addEventListener('click', function () {
+
+        sidebar.classList.toggle('collapsed');
+    });
+});

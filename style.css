@@ -29,7 +29,7 @@ i {
     display: flex;
     align-items: center;
     /* justify-content: space-between; */
-    /* Changed from 'space-evenly' to 'space-between' for better spacing */
+   
     border-bottom: 1px solid black;
 }
 
@@ -65,7 +65,7 @@ i {
 }
 
 .logo-title {
-    font-size: 34px;
+    font-size: 30px;
     margin-left: 10px;
     color: #5f6368;
     cursor: pointer;
@@ -75,6 +75,7 @@ i {
 .search-bar {
   background-color: rgb(238, 238, 238);
   margin-left: 200px;
+  
     height: 50px;
     width: auto;
     border-radius: 8px;
@@ -87,9 +88,9 @@ i {
 }
 .search-bar button{
   border: none;
-  border-radius: 20px; /* Makes the button circular */
+  border-radius: 20px; 
 height: 40px;
-  background-color: transparent; /* Transparent background */
+  background-color: transparent; 
   cursor: pointer;
   transition: background-color 0.5s ease;
 }
@@ -98,12 +99,12 @@ height: 40px;
     margin: 0 20px;
     transition: all 0.50s ease;
     /* border: 2px solid transparent; */
-    /* Adjusted margin for better alignment */
+   
 }
 .search-bar button:hover {
 
  background-color: #d5d9dd;
-  /* Adjusted margin for better alignment */
+ 
 }
 
 .search-bar input {
@@ -135,6 +136,66 @@ height: 40px;
     margin-left: 20px;
     /* Adjusted margin for better alignment */
 }
+
+.sidebar {
+  z-index: 1;
+  width: 250px;
+  height: 100vh;
+  position: fixed;
+  top: 70px; 
+  left: 0;
+  background-color: #ffffff;
+  overflow-y: auto;
+  transition: all 0.5s ease;
+  /* border-right: 1px solid #ccc; */
+}
+
+.sidebar ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.sidebar ul li {
+  padding: 15px;
+  margin-top: 10px;
+  /* border-bottom: 1px solid #ccc; */
+}
+
+.sidebar ul li a {
+  text-decoration: none;
+  color: #333;
+  font-size: 18px;
+  font-weight: 500;
+  align-items: center;
+  text-align: center;
+  transition: color 0.3s;
+}
+
+.sidebar ul li:hover {
+  background-color: #FEEFC3;
+  border-top-right-radius: 50px;
+  border-bottom-right-radius:50px;
+}
+
+.icon-span i{
+  margin-right: 30px;
+}
+
+ 
+
+
+.sidebar.collapsed  {
+  display: none;
+}
+
+.sidebar.collapsed:hover {
+  width: 250px; 
+}
+
+
+/* .sidebar ul li:hover a {
+  color: #007BFF;
+} */
 
 main {
     margin: 0 auto;
@@ -222,6 +283,55 @@ main {
     border: 0;
 }
 
+.modal {
+  position: fixed;
+  left: 0;
+  z-index: 200;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(229, 229, 229, 0.5);
+  opacity: 0;
+  visibility: hidden;
+  transform: scale(1.1);
+  transition: visibility 0s linear 0.25s, opacity 0.25s 0s, transform 0.25s;
+}
+.modal-content {
+  box-shadow: 0 1px 3px 0 rgba(60, 64, 67, 0.302),
+    0 4px 8px 3px rgba(60, 64, 67, 0.149);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 1rem 1.5rem;
+  width: 24rem;
+  border-radius: 0.5rem;
+}
+
+.modal-close-button {
+  float: right;
+  margin: 0.2em 0;
+  box-sizing: border-box;
+  color: rgba(0, 0, 0, 0.87);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  letter-spacing: 0.01785714em;
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.25rem;
+  height: 36px;
+  padding: 8px 24px;
+  border-radius: 4px;
+  border-color: transparent !important;
+  background-color: rgb(251, 251, 251);
+  cursor: pointer;
+}
+
+.modal-close-button:hover {
+  background-color: rgba(95, 99, 104, 0.039);
+}
 .modal-title {
     width: calc(100% - 10px);
     min-height: 43px;
@@ -421,56 +531,7 @@ input:focus {
     border: 1px solid black;
   }
   
-  .modal {
-    position: fixed;
-    left: 0;
-    z-index: 200;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(229, 229, 229, 0.5);
-    opacity: 0;
-    visibility: hidden;
-    transform: scale(1.1);
-    transition: visibility 0s linear 0.25s, opacity 0.25s 0s, transform 0.25s;
-  }
   
-  .modal-content {
-    box-shadow: 0 1px 3px 0 rgba(60, 64, 67, 0.302),
-      0 4px 8px 3px rgba(60, 64, 67, 0.149);
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: white;
-    padding: 1rem 1.5rem;
-    width: 24rem;
-    border-radius: 0.5rem;
-  }
-  
-  .modal-close-button {
-    float: right;
-    margin: 0.2em 0;
-    box-sizing: border-box;
-    color: rgba(0, 0, 0, 0.87);
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    letter-spacing: 0.01785714em;
-    font-size: 1rem;
-    font-weight: 500;
-    line-height: 1.25rem;
-    height: 36px;
-    padding: 8px 24px;
-    border-radius: 4px;
-    border-color: transparent !important;
-    background-color: rgb(251, 251, 251);
-    cursor: pointer;
-  }
-  
-  .modal-close-button:hover {
-    background-color: rgba(95, 99, 104, 0.039);
-  }
   
   .open-modal {
     opacity: 1;
@@ -494,3 +555,98 @@ input:focus {
   #teal {
     background: #a7ffeb;
   }
+  
+
+
+
+
+  /* responsive for mobile */
+/* responsive for mobile */
+@media (max-width: 768px) {
+  .navbar {
+      height: 60px;
+  }
+  .logo img {
+    height: 40px;  /* Adjust the height as per your design */
+    width: auto;   /* Allows the width to adjust proportionally */
+}
+  .menu-bar i {
+      margin-left: 10px;
+      padding: 10px;
+      height: 20px;
+      width: 20px;
+  }
+
+  .nav-logo {
+      /* You can modify or hide the logo for mobile if needed */
+  }
+
+  .search-bar {
+    /* display: none; */
+    background-color: white;
+
+      margin-left: 150px;
+      width: 80%;
+  }
+ 
+ 
+.search-bar form button{
+  right: 0 !important;
+}
+  .search-bar input {
+      width: 100%;
+      display: none;
+  }
+
+  .right-nav {
+      margin-right: 10px;
+  }
+
+  .sidebar {
+      width: 200px;
+  }
+
+  #notes {
+      margin-top: 20px;
+  }
+  .toolbar {
+    
+    opacity: 2;
+  }
+  .note {
+      width: 90%;
+      margin: 10px auto;
+  }
+
+  #form-container {
+      max-width: 80%;
+  }
+
+  #form-buttons {
+      display: block;
+  }
+  
+  #color-tooltip {
+    position: absolute;
+    top: 0; 
+    left: 0;
+    z-index: 20;
+    background: #fff;
+    border: 1px solid black;
+    border-radius: 5px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+    display: none;
+    width: auto; /* Adjust width as needed */
+    height: auto; /* Adjust height as needed */
+    flex-direction: column; /* Stack color options vertically */
+    padding: 5px 7px 3px;
+}
+
+.color-option {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    border: 1px solid #dedede;
+    margin: 2px; /* Added margin for spacing between color options */
+}
+}
