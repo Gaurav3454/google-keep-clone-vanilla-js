@@ -565,15 +565,15 @@ input:focus {
 }
 
 
-  /* responsive for mobile */
-/* responsive for mobile */
+
+
 @media (max-width: 768px) {
   .navbar {
       height: 60px;
   }
   .logo img {
-    height: 40px;  /* Adjust the height as per your design */
-    width: auto;   /* Allows the width to adjust proportionally */
+    height: 40px;  
+    width: auto;   
 }
   .menu-bar i {
       margin-left: 10px;
@@ -582,9 +582,9 @@ input:focus {
       width: 20px;
   }
 
-  .nav-logo {
-      /* You can modify or hide the logo for mobile if needed */
-  }
+  /* .nav-logo {
+     
+  } */
 
   .search-bar {
     /* display: none; */
