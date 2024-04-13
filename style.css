@@ -556,8 +556,13 @@ input:focus {
     background: #a7ffeb;
   }
   
+  .draggable{
+    cursor: move;
+  }
 
-
+.dragging{
+  background-color: red;
+}
 
 
   /* responsive for mobile */

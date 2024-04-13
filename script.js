@@ -1,7 +1,6 @@
 class App {
     constructor() {
         this.notes = JSON.parse(localStorage.getItem('notes')) || [];
-        // this.archive = JSON.parse(localStorage.getItem('notes')) || [];
         this.title = "";
         this.text = "";
         this.id = "";
@@ -24,15 +23,13 @@ class App {
         this.$addStar = document.querySelector('.star-it');
         this.$removeStar = document.querySelector('.remove-star');
         this.draggedItem = null;
-
+        this.$draggables = document.querySelectorAll('.draggable');
 
         this.render();
         this.addEventListeners();
     }
 
     addEventListeners() {
-
-
         document.body.addEventListener("click", event => {
             this.handleFormClick(event);
             this.selectNote(event);
@@ -76,7 +73,6 @@ class App {
             const text = this.$noteText.value;
             const hasNote = title || text;
             if (hasNote) {
-                // add note
                 this.addNote({ title, text });
             }
         });
@@ -89,51 +85,38 @@ class App {
         this.$modalCloseButton.addEventListener("click", event => {
             this.closeModal(event);
         });
+
         document.getElementById('search-text').addEventListener('input', event => {
             this.$searchText = event.target.value;
             this.render();
         });
 
+        this.$draggables.forEach(draggable => {
+            draggable.addEventListener('dragstart', (event) => {
+                this.draggedItem = event.target;
+                draggable.classList.add('dragging');
+            });
 
-
-        document.addEventListener('dragstart', (event) => {
-            this.draggedItem = event.target;
-            console.log('Drag Start:', this.draggedItem);
+            draggable.addEventListener('dragend', (event) => {
+                draggable.classList.remove('dragging');
+            });
         });
 
-        document.addEventListener('dragover', (event) => {
+        this.$notes.addEventListener('dragover', (event) => {
             event.preventDefault();
-            console.log('Drag Over:', event.target);
-        });
-
-        document.addEventListener('drop', (event) => {
-            event.preventDefault(); // Prevent default action
-            if (event.target.getAttribute('draggable') === 'true') {
-                console.log('Drop Target:', event.target);
-                if (this.draggedItem) {
-                    const dropTargetParent = event.target.parentNode;
-                    if (dropTargetParent.tagName.toLowerCase() === 'div') {
-                        dropTargetParent.insertBefore(this.draggedItem, event.target.nextSibling);
-                        console.log('Drop:', this.draggedItem, 'before', event.target);
-                    }
-                }
+            const draggable = document.querySelector('.dragging');
+            if (draggable) {
+                event.target.appendChild(draggable);
             }
         });
-
-
-
     }
 
+
     addStar() {
-        // console.log("addStar called");
-        // console.log("Current this.id:", this.id);
-        // console.log("nate this.id:", notes.id);
         const id = event.target.dataset.id;
         const selectedNote = this.notes.find((note) => note.id === Number(id));
-        console.log(selectedNote);
         if (selectedNote) {
             selectedNote.isStared = true;
-
             this.render();
         }
     }
@@ -141,18 +124,15 @@ class App {
     removeStar() {
         const id = event.target.dataset.id;
         const selectedNote = this.notes.find((note) => note.id === Number(id));
-        console.log(selectedNote);
         if (selectedNote) {
             selectedNote.isStared = false;
             this.render();
         }
     }
 
-
     handleFormClick(event) {
         const form = this.$form;
         const isFormClicked = form && form.contains(event.target);
-
         const title = this.$noteTitle.value;
         const text = this.$noteText.value;
         const hasNote = title || text;
@@ -165,7 +145,6 @@ class App {
             this.closeForm();
         }
     }
-
 
     openForm() {
         this.$form.classList.add("form-open");
@@ -185,7 +164,6 @@ class App {
         if (event.target.matches('.toolbar-delete')) return;
         if (event.target.matches('.remove-star')) return;
         if (event.target.matches('.star-it')) return;
-        if (event.target.matches('.draggable')) return;
 
         if (event.target.closest(".note")) {
             this.$modal.classList.toggle("open-modal");
@@ -259,15 +237,12 @@ class App {
         const deletedNote = this.notes.find(note => note.id === Number(id));
         if (deletedNote) {
             this.bin.push(deletedNote);
-            // console.log("heeeee", this.bin)
             this.notes = this.notes.filter(note => note.id !== Number(id));
             this.render();
         }
     }
 
     render() {
-
-
         this.saveNotes();
         if (window.location.pathname.includes("archive.html")) {
             this.displayStarredNotes();
@@ -277,10 +252,9 @@ class App {
         } else {
             this.displayNotes();
         }
-
     }
+
     displayBinNotes() {
-        // const starredNotes = this.notes.filter(note => note.isStared);
         if (this.bin.length > 0) {
             this.$notes.innerHTML = this.bin
                 .map(
@@ -288,8 +262,14 @@ class App {
                     <div style="background: ${note.color}; min-height: 50px;" class="note draggable" draggable="true" data-id="${note.id}">
                     <div class="${note.title ? 'note-title' : ''}">${note.title}</div>
                     <div class="note-text">${note.text}</div>
-                </div>
-               
+                    <div class="toolbar-container">
+                    <div class="toolbar">
+                    <i class="fa-solid fa-trash toolbar-delete "  data-id=${note.id}></i>
+                    <i class="fa-solid fa-droplet toolbar-color" data-id=${note.id}></i>
+                    ${note.isStared ? `<i class="fa-solid fa-star remove-star" data-id=${note.id} style="color: #FFD43B;"></i>` : `<i class="fa-regular fa-star star-it" data-id=${note.id}></i>`}
+                    </div>
+                    </div>
+                    </div>
        `
                 )
                 .join("");
@@ -297,6 +277,7 @@ class App {
             this.$notes.innerHTML = `<p id="placeholder-text">No deleted notes found.</p>`;
         }
     }
+
     displayStarredNotes() {
         const starredNotes = this.notes.filter(note => note.isStared);
         if (starredNotes.length > 0) {
@@ -306,8 +287,14 @@ class App {
                     <div style="background: ${note.color}; min-height: 50px;" class="note draggable" draggable="true" data-id="${note.id}">
                     <div class="${note.title ? 'note-title' : ''}">${note.title}</div>
                     <div class="note-text">${note.text}</div>
-                </div>
-               
+                    <div class="toolbar-container">
+                    <div class="toolbar">
+                    <i class="fa-solid fa-trash toolbar-delete "  data-id=${note.id}></i>
+                    <i class="fa-solid fa-droplet toolbar-color" data-id=${note.id}></i>
+                    ${note.isStared ? `<i class="fa-solid fa-star remove-star" data-id=${note.id} style="color: #FFD43B;"></i>` : `<i class="fa-regular fa-star star-it" data-id=${note.id}></i>`}
+                    </div>
+                    </div>
+                    </div>
        `
                 )
                 .join("");
@@ -315,9 +302,10 @@ class App {
             this.$notes.innerHTML = `<p id="placeholder-text">No starred notes found.</p>`;
         }
     }
+
     saveNotes() {
         localStorage.setItem('bin', JSON.stringify(this.bin));
-        localStorage.setItem('notes', JSON.stringify(this.notes))
+        localStorage.setItem('notes', JSON.stringify(this.notes));
     }
 
     displayNotes() {
@@ -328,27 +316,22 @@ class App {
             (note.title && note.title.toLowerCase().includes(this.$searchText.toLowerCase())) ||
             (note.text && note.text.toLowerCase().includes(this.$searchText.toLowerCase()))
         );
-        console.log(filteredNotes);
 
         if (filteredNotes.length > 0) {
             this.$notes.innerHTML = filteredNotes
                 .map(
                     note => `
-          <div style="background: ${note.color};" class="note draggable" draggable=true data-id="${note.id}">
-            <div class="${note.title && "note-title"}">${note.title}</div>
-            <div class="note-text">${note.text}</div>
-            <div class="toolbar-container">
-            <div class="toolbar">
-            <i class="fa-solid fa-trash toolbar-delete "  data-id=${note.id}></i>
-            <i class="fa-solid fa-droplet toolbar-color" data-id=${note.id}></i>
-              ${note.isStared ? `<i class="fa-solid fa-star remove-star" data-id=${note.id} style="color: #FFD43B;"></i>` : `<i class="fa-regular fa-star star-it" data-id=${note.id}></i>`}
-             
-             
-           
-             
-              </div>
-            </div>
-          </div>
+                    <div style="background: ${note.color};" class="note draggable" draggable="true" data-id="${note.id}">
+                    <div class="${note.title && "note-title"}">${note.title}</div>
+                    <div class="note-text">${note.text}</div>
+                    <div class="toolbar-container">
+                    <div class="toolbar">
+                    <i class="fa-solid fa-trash toolbar-delete "  data-id=${note.id}></i>
+                    <i class="fa-solid fa-droplet toolbar-color" data-id=${note.id}></i>
+                    ${note.isStared ? `<i class="fa-solid fa-star remove-star" data-id=${note.id} style="color: #FFD43B;"></i>` : `<i class="fa-regular fa-star star-it" data-id=${note.id}></i>`}
+                    </div>
+                    </div>
+                    </div>
        `
                 )
                 .join("");
@@ -356,25 +339,22 @@ class App {
             this.$notes.innerHTML = this.notes
                 .map(
                     note => `
-          <div style="background: ${note.color};" class="note draggable" draggable=true data-id="${note.id}">
-            <div class="${note.title && "note-title"}">${note.title}</div>
-            <div class="note-text">${note.text}</div>
-            <div class="toolbar-container">
-              <div class="toolbar">
-              <i class="fa-solid fa-trash toolbar-delete "  data-id=${note.id}></i>
-              <i class="fa-solid fa-droplet toolbar-color" data-id=${note.id}></i>
-              ${note.isStared ? `<i class="fa-solid fa-star remove-star" data-id=${note.id} style="color: #FFD43B;"></i>` : `<i class="fa-regular fa-star star-it" data-id=${note.id}></i>`}
-
-              </div>
-            </div>
-          </div>
+                    <div style="background: ${note.color};" class="note draggable" draggable="true" data-id="${note.id}">
+                    <div class="${note.title && "note-title"}">${note.title}</div>
+                    <div class="note-text">${note.text}</div>
+                    <div class="toolbar-container">
+                    <div class="toolbar">
+                    <i class="fa-solid fa-trash toolbar-delete "  data-id=${note.id}></i>
+                    <i class="fa-solid fa-droplet toolbar-color" data-id=${note.id}></i>
+                    ${note.isStared ? `<i class="fa-solid fa-star remove-star" data-id=${note.id} style="color: #FFD43B;"></i>` : `<i class="fa-regular fa-star star-it" data-id=${note.id}></i>`}
+                    </div>
+                    </div>
+                    </div>
        `
                 )
                 .join("");
         }
     }
-
-
 }
 
 new App();
@@ -384,7 +364,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const menuBarIcon = document.querySelector('#menu-item ');
 
     menuBarIcon.addEventListener('click', function () {
-
         sidebar.classList.toggle('collapsed');
     });
 });
