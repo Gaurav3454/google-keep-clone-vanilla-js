@@ -22,8 +22,7 @@ class App {
         this.$searchText = document.getElementById('search-text').value;
         this.$addStar = document.querySelector('.star-it');
         this.$removeStar = document.querySelector('.remove-star');
-        this.draggedItem = null;
-        this.$draggables = document.querySelectorAll('.draggable');
+
 
         this.render();
         this.addEventListeners();
@@ -90,10 +89,13 @@ class App {
             this.$searchText = event.target.value;
             this.render();
         });
+    }
 
+    addDragListeners() {
+        this.$draggables = document.querySelectorAll('.draggable');
         this.$draggables.forEach(draggable => {
             draggable.addEventListener('dragstart', (event) => {
-                this.draggedItem = event.target;
+                console.log("dragstart");
                 draggable.classList.add('dragging');
             });
 
@@ -104,12 +106,41 @@ class App {
 
         this.$notes.addEventListener('dragover', (event) => {
             event.preventDefault();
+            console.log("drag");
+            const afterElement = getDragAfterElement(this.$notes, event.clientY);
             const draggable = document.querySelector('.dragging');
-            if (draggable) {
-                event.target.appendChild(draggable);
+            if (afterElement == null) {
+                console.log(afterElement, ">>>>>>>>>>>>>>>>>");
+                this.$notes.appendChild(draggable);
+            } else {
+                this.$notes.insertBefore(draggable, afterElement);
             }
         });
+
+        function getDragAfterElement(area, y) {
+            const dragableElements = [...area.querySelectorAll('.draggable:not(.dragging)')];
+
+            if (dragableElements.length === 0) {
+                return null;
+            }
+
+            const closestElement = dragableElements.reduce((closest, child) => {
+                const box = child.getBoundingClientRect();
+                const offset = y - box.top - box.height / 2;
+
+                if (offset < 0 && offset > closest.offset) {
+                    return { offset: offset, element: child };
+                } else {
+                    return closest;
+                }
+            }, { offset: Number.NEGATIVE_INFINITY }).element;
+
+            return closestElement;
+        }
+
+
     }
+
 
 
     addStar() {
@@ -252,6 +283,7 @@ class App {
         } else {
             this.displayNotes();
         }
+        this.addDragListeners(); // Reapply drag listeners after rendering
     }
 
     displayBinNotes() {
