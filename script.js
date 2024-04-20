@@ -305,6 +305,7 @@ class App {
         } else {
             this.$notes.innerHTML = `<p id="placeholder-text">No starred notes found.</p>`;
         }
+
     }
 
     saveNotes() {
