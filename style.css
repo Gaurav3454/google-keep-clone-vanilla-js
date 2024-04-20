@@ -622,7 +622,9 @@ input:focus {
   .sidebar {
       width: 200px;
   }
-
+  .sidebar.collapsed {
+    width: 0;
+}
   #notes {
       margin-top: 20px;
   }
