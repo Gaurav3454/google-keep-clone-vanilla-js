@@ -1,3 +1,6 @@
+
+
+
 class App {
     constructor() {
         this.notes = JSON.parse(localStorage.getItem('notes')) || [];
@@ -29,67 +32,77 @@ class App {
     }
 
     addEventListeners() {
-        document.body.addEventListener("click", event => {
-            this.handleFormClick(event);
-            this.selectNote(event);
-            this.openModal(event);
-            this.deleteNote(event);
-            if (event.target.matches('.star-it')) {
-                this.addStar();
-            }
-            if (event.target.matches('.remove-star')) {
-                this.removeStar();
-            }
-            if (event.target.matches('.draggable')) return;
-        });
+        if (this.$menu) {
+            this.$menu.addEventListener('click', () => {
+                this.toggleSidebar();
+            });
+        }
 
-        document.body.addEventListener("mouseover", event => {
-            this.openTooltip(event);
-        });
+        if (this.$form) {
+            document.body.addEventListener("click", event => {
+                this.handleFormClick(event);
+                this.selectNote(event);
+                this.openModal(event);
+                this.deleteNote(event);
+                if (event.target.matches('.star-it')) {
+                    this.addStar();
+                }
+                if (event.target.matches('.remove-star')) {
+                    this.removeStar();
+                }
+                if (event.target.matches('.draggable')) return;
+            });
 
-        document.body.addEventListener("mouseout", event => {
-            this.closeTooltip(event);
-        });
+            document.body.addEventListener("mouseover", event => {
+                this.openTooltip(event);
+            });
 
-        this.$colorTooltip.addEventListener("mouseover", function () {
-            this.style.display = "flex";
-        });
+            document.body.addEventListener("mouseout", event => {
+                this.closeTooltip(event);
+            });
 
-        this.$colorTooltip.addEventListener("mouseout", function () {
-            this.style.display = "none";
-        });
+            this.$colorTooltip.addEventListener("mouseover", function () {
+                this.style.display = "flex";
+            });
 
-        this.$colorTooltip.addEventListener("click", event => {
-            const color = event.target.dataset.color;
-            if (color) {
-                this.editNoteColor(color);
-            }
-        });
+            this.$colorTooltip.addEventListener("mouseout", function () {
+                this.style.display = "none";
+            });
 
-        this.$form.addEventListener("submit", event => {
-            event.preventDefault();
-            const title = this.$noteTitle.value;
-            const text = this.$noteText.value;
-            const hasNote = title || text;
-            if (hasNote) {
-                this.addNote({ title, text });
-            }
-        });
+            this.$colorTooltip.addEventListener("click", event => {
+                const color = event.target.dataset.color;
+                if (color) {
+                    this.editNoteColor(color);
+                }
+            });
 
-        this.$formCloseButton.addEventListener("click", event => {
-            event.stopPropagation();
-            this.closeForm();
-        });
+            this.$form.addEventListener("submit", event => {
+                event.preventDefault();
+                const title = this.$noteTitle.value;
+                const text = this.$noteText.value;
+                const hasNote = title || text;
+                if (hasNote) {
+                    this.addNote({ title, text });
+                }
+            });
 
-        this.$modalCloseButton.addEventListener("click", event => {
-            this.closeModal(event);
-        });
+            this.$formCloseButton.addEventListener("click", event => {
+                event.stopPropagation();
+                this.closeForm();
+            });
 
-        document.getElementById('search-text').addEventListener('input', event => {
-            this.$searchText = event.target.value;
-            this.render();
-        });
+            this.$modalCloseButton.addEventListener("click", event => {
+                this.closeModal(event);
+            });
+
+            document.getElementById('search-text').addEventListener('input', event => {
+                this.$searchText = event.target.value;
+                this.render();
+            });
+        }
     }
+
+
 
     addDragListeners() {
         this.$draggables = document.querySelectorAll('.draggable');
@@ -389,13 +402,30 @@ class App {
     }
 }
 
-new App();
 
 document.addEventListener("DOMContentLoaded", function () {
     const sidebar = document.querySelector('.sidebar');
-    const menuBarIcon = document.querySelector('#menu-item ');
+    const menuBarIcon = document.querySelector('#menu');
 
     menuBarIcon.addEventListener('click', function () {
         sidebar.classList.toggle('collapsed');
     });
+
+    const pathName = window.location.pathname;
+
+
+    const links = document.querySelectorAll(".sidebar ul li a");
+
+    links.forEach(link => {
+        const href = link.getAttribute("href").split('/').pop();
+
+
+        if (href === pathName.split('/').pop()) {
+            link.parentElement.classList.add("active");
+        } else {
+            link.parentElement.classList.remove("active");
+        }
+    });
+
+    new App();
 });
