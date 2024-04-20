@@ -6,10 +6,6 @@
     <title>Google Keep</title>
     <link rel="icon" type="image/x-icon" href="./img/favicon-16x16.png" />
     <link rel="stylesheet" href="./style.css" />
-    <!-- <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
-    /> -->
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
@@ -18,7 +14,6 @@
   <body>
     <header>
       <div class="navbar">
-        <!-- icon -->
         <div class="nav-logo">
           <div id="menu" class="menu-bar">
             <i id="menu-item" class="fa-solid fa-bars"></i>
@@ -28,62 +23,56 @@
             <p>Keep</p>
           </div>
         </div>
-        <!-- Search bar -->
         <div class="search-bar">
           <form>
             <button class="search-logo">
               <i class="fa-solid fa-magnifying-glass"></i>
             </button>
-            <!-- <span class="tooltip-text">Search</span> -->
             <input id="search-text" type="text" placeholder="Search" />
           </form>
         </div>
-        <!-- right navbar -->
-        <!-- <div class="right-nav">
-          <div>
-            <i class="fa-solid fa-rotate-right"></i>
-          </div>
-          <div>
-            <i class="fa-solid fa-gear"></i>
-          </div>
-          <img src="./unnamed.png" alt="" />
-        </div> -->
       </div>
     </header>
-    <!-- Home -->
     <aside class="sidebar">
       <ul>
         <li>
-          <a href="index.html"
-            ><span class="icon-span"
-              ><i class="fa-regular fa-lightbulb"></i></span
-            >Home</a
-          >
+          <a href="index.html">
+            <span class="icon-span"
+              ><i class="fa-regular fa-lightbulb"></i
+            ></span>
+            Home
+          </a>
         </li>
         <li>
-          <a href="archive.html"
-            ><span class="icon-span"
-              ><i class="fa-solid fa-box-archive"></i></span
-            >Archive</a
-          >
+          <a href="archive.html">
+            <span class="icon-span"
+              ><i class="fa-solid fa-box-archive"></i
+            ></span>
+            Archive
+          </a>
         </li>
         <li>
-          <a href="bin.html"
-            ><span class="icon-span"><i class="fa-solid fa-trash"></i></span>
-            Bin</a
-          >
+          <a href="bin.html">
+            <span class="icon-span"><i class="fa-solid fa-trash"></i></span>
+            Bin
+          </a>
         </li>
-        <!-- <li><a href="#">Logout</a></li> -->
+        <li>
+          <a href="#" id="label-button">
+            <span class="icon-span"><i class="fa-regular fa-tag"></i></span>
+            Labels
+          </a>
+          <ul id="labels-list">
+            <!-- Labels will be rendered here -->
+          </ul>
+        </li>
       </ul>
     </aside>
-    <!-- Modal for editing -->
     <div class="modal">
       <input type="text" class="modal-title" placeholder="Title" />
       <input type="text" class="modal-text" placeholder="Take a note..." />
       <span class="modal-close-button">Close</span>
     </div>
-    <!-- main -->
-
     <main>
       <div id="form-container">
         <form id="form" autocomplete="off">
@@ -100,17 +89,13 @@
         <img id="placeholder-logo" src="" />
         <p id="placeholder-text">Notes you add appear here</p>
       </div>
-      <!--  -->
       <div id="color-tooltip">
         <div class="color-option" data-color="#fff" id="white"></div>
         <div class="color-option" data-color="#d7aefb" id="purple"></div>
         <div class="color-option" data-color="#fbbc04" id="orange"></div>
         <div class="color-option" data-color="#a7ffeb" id="teal"></div>
       </div>
-
-      <!--  -->
     </main>
-    <!--  -->
     <script src="script.js"></script>
   </body>
 </html>
