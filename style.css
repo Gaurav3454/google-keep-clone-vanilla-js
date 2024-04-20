@@ -146,7 +146,7 @@ width: 600px;
   left: 0;
   background-color: #ffffff;
   overflow-y: auto;
-  transition: all 0.5s ease;
+  transition: all 0.7s ease;
 }
 
 .sidebar ul {
@@ -190,6 +190,7 @@ width: 600px;
 
 .sidebar.collapsed  {
   display: none;
+
 }
 
 .sidebar.collapsed:hover {
@@ -285,7 +286,8 @@ main {
     line-height: 1.5rem;
     /* letter-spacing: 0.00625rem; */
     border: 0;
-}.modal {
+}
+.modal {
   position: fixed;
   left: 0;
   z-index: 200;
@@ -299,9 +301,7 @@ main {
   opacity: 0;
   visibility: hidden;
   transition: opacity 0.25s ease, visibility 0s linear 0.25s;
-  border: 2px solid black;
 }
-
 
 .modal-content {
   display: flex;
@@ -316,7 +316,7 @@ main {
   overflow: hidden;
   position: relative;
   transition-duration: 0.218s;
-  transition-property:  border, opacity, box-shadow, transform;
+  transition-property: background, border, opacity, box-shadow, transform;
   transition-timing-function: ease-in;
 }
 
@@ -362,6 +362,7 @@ main {
   outline: none;
   border-color: #007BFF; /* Example color for focus state */
 }
+
 
 
 
@@ -467,7 +468,7 @@ input:focus {
   
   .toolbar {
     
-    opacity: 0;
+    /* opacity: 0; */
     flex-direction: row-reverse;
     align-items: center;
     color: rgba(0, 0, 0, 0.54);
@@ -481,8 +482,16 @@ input:focus {
   }
  
   .toolbar:hover {
-    opacity: 1;
+    /* opacity: 1; */
   }
+  .toolbar img{
+    height: 30px;
+    width: auto;
+    opacity: 1;
+    cursor: pointer;
+    
+  }
+  
   
   .toolbar-color,
   .toolbar-delete,

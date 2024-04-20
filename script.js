@@ -1,6 +1,3 @@
-
-
-
 class App {
     constructor() {
         this.notes = JSON.parse(localStorage.getItem('notes')) || [];
@@ -23,9 +20,6 @@ class App {
         this.$modalCloseButton = document.querySelector(".modal-close-button");
         this.$colorTooltip = document.querySelector("#color-tooltip");
         this.$searchText = document.getElementById('search-text').value;
-        this.$addStar = document.querySelector('.star-it');
-        this.$removeStar = document.querySelector('.remove-star');
-
 
         this.render();
         this.addEventListeners();
@@ -44,11 +38,11 @@ class App {
                 this.selectNote(event);
                 this.openModal(event);
                 this.deleteNote(event);
-                if (event.target.matches('.star-it')) {
-                    this.addStar();
+                if (event.target.matches('.star')) {
+                    this.addStar(event);
                 }
-                if (event.target.matches('.remove-star')) {
-                    this.removeStar();
+                if (event.target.matches('.star-filled')) {
+                    this.removeStar(event);
                 }
                 if (event.target.matches('.draggable')) return;
             });
@@ -102,61 +96,7 @@ class App {
         }
     }
 
-
-
-    addDragListeners() {
-        this.$draggables = document.querySelectorAll('.draggable');
-        this.$draggables.forEach(draggable => {
-            draggable.addEventListener('dragstart', (event) => {
-                console.log("dragstart");
-                draggable.classList.add('dragging');
-            });
-
-            draggable.addEventListener('dragend', (event) => {
-                draggable.classList.remove('dragging');
-            });
-        });
-
-        this.$notes.addEventListener('dragover', (event) => {
-            event.preventDefault();
-            console.log("drag");
-            const afterElement = getDragAfterElement(this.$notes, event.clientY);
-            const draggable = document.querySelector('.dragging');
-            if (afterElement == null) {
-                console.log(afterElement, ">>>>>>>>>>>>>>>>>");
-                this.$notes.appendChild(draggable);
-            } else {
-                this.$notes.insertBefore(draggable, afterElement);
-            }
-        });
-
-        function getDragAfterElement(area, y) {
-            const dragableElements = [...area.querySelectorAll('.draggable:not(.dragging)')];
-
-            if (dragableElements.length === 0) {
-                return null;
-            }
-
-            const closestElement = dragableElements.reduce((closest, child) => {
-                const box = child.getBoundingClientRect();
-                const offset = y - box.top - box.height / 2;
-
-                if (offset < 0 && offset > closest.offset) {
-                    return { offset: offset, element: child };
-                } else {
-                    return closest;
-                }
-            }, { offset: Number.NEGATIVE_INFINITY }).element;
-
-            return closestElement;
-        }
-
-
-    }
-
-
-
-    addStar() {
+    addStar(event) {
         const id = event.target.dataset.id;
         const selectedNote = this.notes.find((note) => note.id === Number(id));
         if (selectedNote) {
@@ -165,7 +105,7 @@ class App {
         }
     }
 
-    removeStar() {
+    removeStar(event) {
         const id = event.target.dataset.id;
         const selectedNote = this.notes.find((note) => note.id === Number(id));
         if (selectedNote) {
@@ -205,9 +145,9 @@ class App {
     }
 
     openModal(event) {
-        if (event.target.matches('.toolbar-delete')) return;
-        if (event.target.matches('.remove-star')) return;
-        if (event.target.matches('.star-it')) return;
+        if (event.target.matches('.delete-note')) return;
+        if (event.target.matches('.star')) return;
+        if (event.target.matches('.star-filled')) return;
 
         if (event.target.closest(".note")) {
             this.$modal.classList.toggle("open-modal");
@@ -276,7 +216,7 @@ class App {
 
     deleteNote(event) {
         event.stopPropagation();
-        if (!event.target.matches('.toolbar-delete')) return;
+        if (!event.target.matches('.delete-note')) return;
         const id = event.target.dataset.id;
         const deletedNote = this.notes.find(note => note.id === Number(id));
         if (deletedNote) {
@@ -296,7 +236,7 @@ class App {
         } else {
             this.displayNotes();
         }
-        this.addDragListeners(); // Reapply drag listeners after rendering
+        this.addDragListeners();
     }
 
     displayBinNotes() {
@@ -309,15 +249,35 @@ class App {
                     <div class="note-text">${note.text}</div>
                     <div class="toolbar-container">
                     <div class="toolbar">
-                    <i class="fa-solid fa-trash toolbar-delete "  data-id=${note.id}></i>
-                    <i class="fa-solid fa-droplet toolbar-color" data-id=${note.id}></i>
-                    ${note.isStared ? `<i class="fa-solid fa-star remove-star" data-id=${note.id} style="color: #FFD43B;"></i>` : `<i class="fa-regular fa-star star-it" data-id=${note.id}></i>`}
+                    <img src="img/svgexport-20.svg" alt="" data-id=${note.id} class="delete-note" />
+                    <img src="img/svgexport-21.svg" alt="" data-id=${note.id} class="restore-note"  />
                     </div>
                     </div>
                     </div>
        `
                 )
                 .join("");
+
+
+            this.$notes.querySelectorAll('.restore-note').forEach(img => {
+                img.addEventListener('click', (event) => {
+                    const id = event.target.dataset.id;
+                    const restoredNote = this.bin.find(note => note.id === Number(id));
+                    if (restoredNote) {
+                        this.notes.push(restoredNote);
+                        this.bin = this.bin.filter(note => note.id !== Number(id));
+                        this.render();
+                    }
+                });
+            });
+
+            this.$notes.querySelectorAll('.delete-note').forEach(img => {
+                img.addEventListener('click', (event) => {
+                    const id = event.target.dataset.id;
+                    this.bin = this.bin.filter(note => note.id !== Number(id));
+                    this.render();
+                });
+            });
         } else {
             this.$notes.innerHTML = `<p id="placeholder-text">No deleted notes found.</p>`;
         }
@@ -334,9 +294,8 @@ class App {
                     <div class="note-text">${note.text}</div>
                     <div class="toolbar-container">
                     <div class="toolbar">
-                    <i class="fa-solid fa-trash toolbar-delete "  data-id=${note.id}></i>
-                    <i class="fa-solid fa-droplet toolbar-color" data-id=${note.id}></i>
-                    ${note.isStared ? `<i class="fa-solid fa-star remove-star" data-id=${note.id} style="color: #FFD43B;"></i>` : `<i class="fa-regular fa-star star-it" data-id=${note.id}></i>`}
+                  
+                    <img src="img/svgexport-${note.isStared ? '18' : '26'}.svg" alt="" data-id=${note.id} class="star" />
                     </div>
                     </div>
                     </div>
@@ -371,9 +330,9 @@ class App {
                     <div class="note-text">${note.text}</div>
                     <div class="toolbar-container">
                     <div class="toolbar">
-                    <i class="fa-solid fa-trash toolbar-delete "  data-id=${note.id}></i>
-                    <i class="fa-solid fa-droplet toolbar-color" data-id=${note.id}></i>
-                    ${note.isStared ? `<i class="fa-solid fa-star remove-star" data-id=${note.id} style="color: #FFD43B;"></i>` : `<i class="fa-regular fa-star star-it" data-id=${note.id}></i>`}
+                    <img src="img/svgexport-20.svg" alt="" data-id=${note.id} class="delete-note" />
+                    <img src="img/svgexport-16.svg" alt="" data-id=${note.id} class="toolbar-color"/>
+                    <img src="img/svgexport-${note.isStared ? '18' : '26'}.svg" alt="" data-id=${note.id} class="${note.isStared ? 'star-filled' : 'star'}" />
                     </div>
                     </div>
                     </div>
@@ -389,9 +348,9 @@ class App {
                     <div class="note-text">${note.text}</div>
                     <div class="toolbar-container">
                     <div class="toolbar">
-                    <i class="fa-solid fa-trash toolbar-delete "  data-id=${note.id}></i>
-                    <i class="fa-solid fa-droplet toolbar-color" data-id=${note.id}></i>
-                    ${note.isStared ? `<i class="fa-solid fa-star remove-star" data-id=${note.id} style="color: #FFD43B;"></i>` : `<i class="fa-regular fa-star star-it" data-id=${note.id}></i>`}
+                    <img src="img/svgexport-20.svg" alt="" data-id=${note.id} class="delete-note" />
+                    <img src="img/svgexport-16.svg" alt="" data-id=${note.id} class="toolbar-color"/>
+                    <img src="img/svgexport-${note.isStared ? '18' : '26'}.svg" alt="" data-id=${note.id} class="${note.isStared ? 'star-filled' : 'star'}" />
                     </div>
                     </div>
                     </div>
@@ -400,8 +359,57 @@ class App {
                 .join("");
         }
     }
-}
 
+    addDragListeners() {
+        this.$draggables = document.querySelectorAll('.draggable');
+        this.$draggables.forEach(draggable => {
+            draggable.addEventListener('dragstart', (event) => {
+                console.log("dragstart");
+                draggable.classList.add('dragging');
+            });
+
+            draggable.addEventListener('dragend', (event) => {
+                draggable.classList.remove('dragging');
+            });
+        });
+
+        this.$notes.addEventListener('dragover', (event) => {
+            event.preventDefault();
+            console.log("drag");
+            const afterElement = getDragAfterElement(this.$notes, event.clientY);
+            const draggable = document.querySelector('.dragging');
+            if (afterElement == null) {
+                console.log(afterElement, ">>>>>>>>>>>>>>>>>");
+                this.$notes.appendChild(draggable);
+            } else {
+                this.$notes.insertBefore(draggable, afterElement);
+            }
+        });
+
+        function getDragAfterElement(area, y) {
+            const dragableElements = [...area.querySelectorAll('.draggable:not(.dragging)')];
+
+            if (dragableElements.length === 0) {
+                return null;
+            }
+
+            const closestElement = dragableElements.reduce((closest, child) => {
+                const box = child.getBoundingClientRect();
+                const offset = y - box.top - box.height / 2;
+
+                if (offset < 0 && offset > closest.offset) {
+                    return { offset: offset, element: child };
+                } else {
+                    return closest;
+                }
+            }, { offset: Number.NEGATIVE_INFINITY }).element;
+
+            return closestElement;
+        }
+
+
+    }
+}
 
 document.addEventListener("DOMContentLoaded", function () {
     const sidebar = document.querySelector('.sidebar');
