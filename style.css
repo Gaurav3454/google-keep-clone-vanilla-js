@@ -512,7 +512,7 @@ input:focus {
   
   #color-tooltip {
     position: absolute;
-    top: 0; /* Change from 'top: -40' to 'top: 0' */
+    top: 0; 
     left: 0;
    
     z-index: 20;
@@ -591,9 +591,7 @@ input:focus {
       width: 20px;
   }
 
-  /* .nav-logo {
-     
-  } */
+ 
 
   .search-bar {
     margin-left: 0;
@@ -666,6 +664,6 @@ input:focus {
     height: 25px;
     border-radius: 50%;
     border: 1px solid #dedede;
-    margin: 2px; /* Added margin for spacing between color options */
+    margin: 2px; 
 }
 }
