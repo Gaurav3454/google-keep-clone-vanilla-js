@@ -655,9 +655,9 @@ input:focus {
     border-radius: 5px;
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
     display: none;
-    width: auto; /* Adjust width as needed */
-    height: auto; /* Adjust height as needed */
-    flex-direction: column; /* Stack color options vertically */
+    width: auto; 
+    height: auto; 
+    flex-direction: column; 
     padding: 5px 7px 3px;
 }
 
